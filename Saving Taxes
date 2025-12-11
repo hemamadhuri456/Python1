@@ -1,0 +1,7 @@
+T = int(input())
+for _ in range(T):
+    X, Y = map(int, input().split())
+    # Minimum investment to reduce taxable income to Y or less
+    investment = X - Y
+    print(investment)
+
