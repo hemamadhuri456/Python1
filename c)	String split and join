@@ -1,0 +1,10 @@
+def split_and_join(line):
+    # Split the string by space
+    parts = line.split(" ")
+    # Join the list with hyphen
+    return "-".join(parts)
+
+# Sample Input
+line = input()
+print(split_and_join(line))
+
