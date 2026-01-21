@@ -1,0 +1,22 @@
+class Solution:
+    def getSecondLargest(self, arr):
+        # Initialize variables to -1 as per constraints (positive integers)
+        largest = -1
+        second_largest = -1
+        
+        for num in arr:
+            # Case 1: Current number is greater than the largest found so far
+            if num > largest:
+                second_largest = largest
+                largest = num
+            
+            # Case 2: Current number is between largest and second_largest
+            # We must check num != largest to handle duplicates of the maximum
+            elif num > second_largest and num != largest:
+                second_largest = num
+                
+        return second_largest
+
+# Example Usage:
+# sol = Solution()
+# print(sol.getSecondLargest([12, 35, 1, 10, 34, 1])) # Output: 34
