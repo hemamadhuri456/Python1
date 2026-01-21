@@ -1,0 +1,57 @@
+class Solution:
+    def isLeaf(self, node):
+        return node.left is None and node.right is None
+
+    def addLeftBoundary(self, root, res):
+        curr = root.left
+        while curr:
+            if not self.isLeaf(curr):
+                res.append(curr.data)
+            if curr.left:
+                curr = curr.left
+            else:
+                curr = curr.right
+
+    def addLeaves(self, root, res):
+        if self.isLeaf(root):
+            res.append(root.data)
+            return
+        if root.left:
+            self.addLeaves(root.left, res)
+        if root.right:
+            self.addLeaves(root.right, res)
+
+    def addRightBoundary(self, root, res):
+        curr = root.right
+        temp = []
+        while curr:
+            if not self.isLeaf(curr):
+                temp.append(curr.data)
+            if curr.right:
+                curr = curr.right
+            else:
+                curr = curr.left
+        # Add to res in reverse order
+        for i in range(len(temp) - 1, -1, -1):
+            res.append(temp[i])
+
+    def boundaryTraversal(self, root):
+        if not root:
+            return []
+        
+        res = []
+        
+        # 1. Add root (if not a leaf)
+        if not self.isLeaf(root):
+            res.append(root.data)
+        
+        # 2. Add Left Boundary
+        self.addLeftBoundary(root, res)
+        
+        # 3. Add Leaf Nodes
+        self.addLeaves(root, res)
+        
+        # 4. Add Right Boundary
+        self.addRightBoundary(root, res)
+        
+        return res
