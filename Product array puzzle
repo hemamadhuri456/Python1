@@ -1,0 +1,20 @@
+class Solution:
+    def productExceptSelf(self, arr):
+        n = len(arr)
+        res = [1] * n
+        
+        # Step 1: Calculate prefix products
+        # res[i] will contain the product of all elements to the left of i
+        prefix = 1
+        for i in range(n):
+            res[i] = prefix
+            prefix *= arr[i]
+            
+        # Step 2: Calculate suffix products on the fly and multiply
+        # suffix will contain the product of all elements to the right of i
+        suffix = 1
+        for i in range(n - 1, -1, -1):
+            res[i] *= suffix
+            suffix *= arr[i]
+            
+        return res
