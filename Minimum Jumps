@@ -1,0 +1,35 @@
+class Solution:
+    def minJumps(self, arr):
+        n = len(arr)
+        
+        # If the first element is 0 and there's more than 1 element, we can't move
+        if arr[0] == 0:
+            return -1
+        
+        # If there's only one element, we are already at the end
+        if n <= 1:
+            return 0
+            
+        jumps = 0
+        current_end = 0
+        farthest = 0
+        
+        # We don't need to jump from the last element, so iterate to n-1
+        for i in range(n - 1):
+            # Update the farthest index we can reach
+            farthest = max(farthest, i + arr[i])
+            
+            # If we reach the end of our current jump range
+            if i == current_end:
+                jumps += 1
+                current_end = farthest
+                
+                # If current_end reached or passed the last index
+                if current_end >= n - 1:
+                    return jumps
+            
+            # If we are stuck (can't move forward)
+            if i >= farthest:
+                return -1
+                
+        return -1
