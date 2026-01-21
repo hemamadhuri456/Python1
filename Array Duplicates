@@ -1,0 +1,24 @@
+class Solution:
+    def findDuplicates(self, arr):
+        duplicates = []
+        
+        for i in range(len(arr)):
+            # Get the value at current index (use absolute value as it might be negated)
+            val = abs(arr[i])
+            
+            # Use val-1 as the index to mark
+            index = val - 1
+            
+            # If the value at that index is negative, we've seen 'val' before
+            if arr[index] < 0:
+                duplicates.append(val)
+            else:
+                # Mark the value at 'index' as seen by making it negative
+                arr[index] = -arr[index]
+                
+        return duplicates
+
+# Example Usage:
+# sol = Solution()
+# print(sol.findDuplicates([2, 3, 1, 2, 3])) # Output: [2, 3]
+        
