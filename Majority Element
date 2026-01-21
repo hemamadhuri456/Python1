@@ -1,0 +1,27 @@
+class Solution:
+    def majorityElement(self, arr):
+        n = len(arr)
+        candidate = None
+        count = 0
+        
+        # Phase 1: Find Potential Candidate
+        for num in arr:
+            if count == 0:
+                candidate = num
+                count = 1
+            elif num == candidate:
+                count += 1
+            else:
+                count -= 1
+        
+        # Phase 2: Verification
+        # (Required because the problem says "return -1 if no majority exists")
+        actual_count = 0
+        for num in arr:
+            if num == candidate:
+                actual_count += 1
+        
+        if actual_count > n // 2:
+            return candidate
+        else:
+            return -1
