@@ -1,0 +1,22 @@
+class Solution:
+    def nCr(self, n, r):
+        # Base case: r > n
+        if r > n:
+            return 0
+        
+        # Base case: r = 0 or r = n
+        if r == 0 or r == n:
+            return 1
+            
+        # Optimization: C(n, r) is the same as C(n, n-r)
+        # We pick the smaller r to reduce the number of iterations
+        if r > n // 2:
+            r = n - r
+            
+        res = 1
+        # Calculate numerator and denominator simultaneously
+        for i in range(r):
+            res = res * (n - i)
+            res = res // (i + 1)
+            
+        return res
