@@ -1,0 +1,22 @@
+class Solution:
+    # Function to find the leaders in the array.
+    def leaders(self, arr):
+        n = len(arr)
+        leaders_list = []
+        
+        # The rightmost element is always a leader
+        max_from_right = arr[n-1]
+        leaders_list.append(max_from_right)
+        
+        # Traverse the array from right to left (starting from second to last)
+        for i in range(n-2, -1, -1):
+            if arr[i] >= max_from_right:
+                leaders_list.append(arr[i])
+                max_from_right = arr[i]
+        
+        # Reverse the list to get leaders in the correct order (left to right)
+        return leaders_list[::-1]
+
+# Example Usage:
+# sol = Solution()
+# print(sol.leaders([16, 17, 4, 3, 5, 2])) # Output: [17, 5, 2]
