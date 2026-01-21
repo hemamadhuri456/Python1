@@ -1,0 +1,33 @@
+class Solution:
+    def rotate(self, head, k):
+        if not head or k == 0:
+            return head
+        
+        # 1. Find the length and the last node
+        last_node = head
+        n = 1
+        while last_node.next:
+            last_node = last_node.next
+            n += 1
+        
+        # 2. Normalize k
+        k = k % n
+        if k == 0:
+            return head
+        
+        # 3. Connect last node to head to make it circular
+        last_node.next = head
+        
+        # 4. Find the k-th node (the new tail)
+        # We move k-1 steps from the head to reach the k-th node
+        new_tail = head
+        for _ in range(k - 1):
+            new_tail = new_tail.next
+            
+        # 5. The node after new_tail is the new head
+        new_head = new_tail.next
+        
+        # 6. Break the circular link
+        new_tail.next = None
+        
+        return new_head
