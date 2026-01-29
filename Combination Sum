@@ -1,0 +1,25 @@
+class Solution:
+    def combinationSum(self, candidates: list[int], target: int) -> list[list[int]]:
+        res = []
+
+        def backtrack(i, cur, total):
+            # Base Case: We found a valid combination
+            if total == target:
+                res.append(cur.copy())
+                return
+            
+            # Base Case: We exceeded the target or ran out of candidates
+            if i >= len(candidates) or total > target:
+                return
+
+            # Decision 1: Include candidates[i]
+            cur.append(candidates[i])
+            # Note: We stay at index 'i' because we can reuse the number
+            backtrack(i, cur, total + candidates[i])
+            
+            # Decision 2: Clean up (backtrack) and move to the next candidate
+            cur.pop()
+            backtrack(i + 1, cur, total)
+
+        backtrack(0, [], 0)
+        return res
