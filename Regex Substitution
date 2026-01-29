@@ -1,0 +1,31 @@
+import re
+
+def transform_symbols():
+    # Read the number of lines
+    try:
+        n = int(input())
+    except EOFError:
+        return
+
+    for _ in range(n):
+        line = input()
+        
+        # We use a while loop or repeated substitution because 
+        # overlapping matches (like " && && ") can sometimes be skipped 
+        # by a single regex pass depending on the engine.
+        
+        # Replacement for &&
+        line = re.sub(r'(?<= )&&(?= )', 'and', line)
+        # Replacement for ||
+        line = re.sub(r'(?<= )\|\|(?= )', 'or', line)
+        
+        # Because the constraint says they won't be at the start/end, 
+        # and we need to handle " && && ", running it twice ensures 
+        # we catch symbols that share a middle space.
+        line = re.sub(r'(?<= )&&(?= )', 'and', line)
+        line = re.sub(r'(?<= )\|\|(?= )', 'or', line)
+        
+        print(line)
+
+if __name__ == "__main__":
+    transform_symbols()
