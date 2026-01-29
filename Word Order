@@ -1,0 +1,21 @@
+def solve():
+    n = int(input())
+    word_count = {}
+    order = []
+
+    for _ in range(n):
+        word = input().strip()
+        if word not in word_count:
+            word_count[word] = 1
+            order.append(word)
+        else:
+            word_count[word] += 1
+
+    # Number of distinct words
+    print(len(order))
+
+    # Occurrences in order of first appearance
+    print(' '.join(str(word_count[word]) for word in order))
+
+if __name__ == '__main__':
+    solve()
