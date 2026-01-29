@@ -1,0 +1,40 @@
+def fun(s):
+    # Rule 1: Must have username@websitename.extension format
+    try:
+        # Split into username and the rest
+        username, rest = s.split('@')
+        # Split the rest into website and extension
+        website, extension = rest.split('.')
+    except ValueError:
+        # If there aren't exactly one '@' and one '.', it's invalid
+        return False
+
+    # Rule 2: Username can only contain letters, digits, dashes, and underscores
+    # We replace valid symbols with empty strings to check if anything invalid remains
+    valid_username = username.replace('-', '').replace('_', '').isalnum()
+    
+    # Rule 3: Website name can only have letters and digits
+    valid_website = website.isalnum()
+    
+    # Rule 4: Extension can only contain letters
+    # Rule 5: Maximum length of extension is 3
+    valid_extension = extension.isalpha() and len(extension) <= 3
+
+    return valid_username and valid_website and valid_extension
+
+def filter_mail(emails):
+    return list(filter(fun, emails))
+
+
+def filter_mail(emails):
+    return list(filter(fun, emails))
+
+if __name__ == '__main__':
+    n = int(input())
+    emails = []
+    for _ in range(n):
+        emails.append(input())
+
+filtered_emails = filter_mail(emails)
+filtered_emails.sort()
+print(filtered_emails)
