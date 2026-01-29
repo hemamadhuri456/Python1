@@ -1,0 +1,27 @@
+from datetime import datetime
+
+def solve():
+    # Number of test cases
+    t = int(input())
+    
+    for _ in range(t):
+        # Read the two timestamps
+        time1 = input().strip()
+        time2 = input().strip()
+        
+        # Define the datetime format for parsing
+        fmt = "%a %d %b %Y %H:%M:%S %z"
+        
+        # Convert strings to datetime objects
+        dt1 = datetime.strptime(time1, fmt)
+        dt2 = datetime.strptime(time2, fmt)
+        
+        # Calculate absolute difference in seconds
+        diff = abs(int((dt1 - dt2).total_seconds()))
+        
+        # Print the result
+        print(diff)
+
+if __name__ == '__main__':
+    solve()
+
