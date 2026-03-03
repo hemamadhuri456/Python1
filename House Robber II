@@ -1,0 +1,29 @@
+from typing import List
+
+class Solution:
+    def rob(self, nums: List[int]) -> int:
+        if not nums:
+            return 0
+        if len(nums) == 1:
+            return nums[0]
+
+        # Helper function: linear House Robber
+        def rob_linear(houses):
+            prev, curr = 0, 0
+            for money in houses:
+                prev, curr = curr, max(curr, prev + money)
+            return curr
+
+        # Case 1: exclude last house
+        money1 = rob_linear(nums[:-1])
+        # Case 2: exclude first house
+        money2 = rob_linear(nums[1:])
+
+        return max(money1, money2)
+
+# Example usage:
+nums = [2,3,2]
+print(Solution().rob(nums))  # Output: 3
+
+nums = [1,2,3,1]
+print(Solution().rob(nums))  # Output: 4
