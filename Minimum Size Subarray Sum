@@ -1,0 +1,25 @@
+class Solution:
+    def minSubArrayLen(self, target: int, nums: list[int]) -> int:
+        n = len(nums)
+        min_len = float('inf')  # To store the minimal length
+        current_sum = 0
+        start = 0
+
+        for end in range(n):
+            current_sum += nums[end]  # Add the current number to the window sum
+
+            # Shrink the window from the left while sum >= target
+            while current_sum >= target:
+                min_len = min(min_len, end - start + 1)
+                current_sum -= nums[start]
+                start += 1
+
+        # If no valid subarray found, return 0
+        return 0 if min_len == float('inf') else min_len
+
+
+# Example usage:
+sol = Solution()
+print(sol.minSubArrayLen(7, [2,3,1,2,4,3]))  # Output: 2
+print(sol.minSubArrayLen(4, [1,4,4]))        # Output: 1
+print(sol.minSubArrayLen(11, [1,1,1,1,1,1,1,1]))  # Output: 0
