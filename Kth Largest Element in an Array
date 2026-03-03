@@ -1,0 +1,29 @@
+import random
+
+class Solution:
+    def findKthLargest(self, nums: List[int], k: int) -> int:
+        def quickselect(left, right):
+            pivot_index = random.randint(left, right)
+            pivot = nums[pivot_index]
+            # Move pivot to end
+            nums[pivot_index], nums[right] = nums[right], nums[pivot_index]
+            store_index = left
+            for i in range(left, right):
+                if nums[i] > pivot:  # Greater goes left
+                    nums[i], nums[store_index] = nums[store_index], nums[i]
+                    store_index += 1
+            nums[store_index], nums[right] = nums[right], nums[store_index]
+            
+            if store_index == k-1:
+                return nums[store_index]
+            elif store_index < k-1:
+                return quickselect(store_index+1, right)
+            else:
+                return quickselect(left, store_index-1)
+        
+        return quickselect(0, len(nums)-1)
+
+# Example usage:
+nums = [3,2,1,5,6,4]
+k = 2
+print(Solution().findKthLargest(nums, k))  # Output: 5
