@@ -1,0 +1,32 @@
+class Solution:
+    def containsNearbyAlmostDuplicate(self, nums, indexDiff, valueDiff):
+        if valueDiff < 0:
+            return False
+        
+        buckets = {}
+        bucket_size = valueDiff + 1
+        
+        for i, num in enumerate(nums):
+            bucket_id = num // bucket_size
+            
+            # Check same bucket
+            if bucket_id in buckets:
+                return True
+            
+            # Check neighboring buckets
+            if (bucket_id - 1 in buckets and 
+                abs(num - buckets[bucket_id - 1]) <= valueDiff):
+                return True
+            
+            if (bucket_id + 1 in buckets and 
+                abs(num - buckets[bucket_id + 1]) <= valueDiff):
+                return True
+            
+            buckets[bucket_id] = num
+            
+            # Maintain sliding window size indexDiff
+            if i >= indexDiff:
+                old_bucket_id = nums[i - indexDiff] // bucket_size
+                del buckets[old_bucket_id]
+        
+        return False
