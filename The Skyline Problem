@@ -1,0 +1,41 @@
+from typing import List
+import heapq
+
+class Solution:
+    def getSkyline(self, buildings: List[List[int]]) -> List[List[int]]:
+        events = []
+        
+        # Step 1: Create events
+        for left, right, height in buildings:
+            events.append((left, -height))   # start event
+            events.append((right, height))   # end event
+        
+        # Step 2: Sort events
+        events.sort()
+        
+        result = []
+        max_heap = [0]   # ground level
+        heapq.heapify(max_heap)
+        prev_height = 0
+        
+        active_heights = {0: 1}  # count map
+        
+        for x, h in events:
+            if h < 0:  # start event
+                heapq.heappush(max_heap, h)
+                active_heights[h] = active_heights.get(h, 0) + 1
+            else:  # end event
+                active_heights[-h] -= 1
+            
+            # Remove inactive heights
+            while max_heap and active_heights[max_heap[0]] == 0:
+                heapq.heappop(max_heap)
+            
+            current_height = -max_heap[0]
+            
+            # If height changed, add key point
+            if current_height != prev_height:
+                result.append([x, current_height])
+                prev_height = current_height
+        
+        return result
