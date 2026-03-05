@@ -1,0 +1,14 @@
+class Solution:
+    def gameOfLife(self, b):
+        m, n = len(b), len(b[0])
+        c = [r[:] for r in b]
+        d = (-1, 0, 1)
+
+        for i in range(m):
+            for j in range(n):
+                live = sum(
+                    c[i+x][j+y]
+                    for x in d for y in d
+                    if (x or y) and 0 <= i+x < m and 0 <= j+y < n
+                )
+                b[i][j] = int(live == 3 or (c[i][j] and live == 2))
