@@ -1,0 +1,26 @@
+class Solution:
+    def isAdditiveNumber(self, num: str) -> bool:
+        n = len(num)
+        
+        # Try every split for first two numbers
+        for i in range(1, n):
+            for j in range(i+1, n):
+                num1, num2 = num[:i], num[i:j]
+                
+                # Skip if any number has leading zero (except "0" itself)
+                if (len(num1) > 1 and num1[0] == '0') or (len(num2) > 1 and num2[0] == '0'):
+                    continue
+                
+                n1, n2 = int(num1), int(num2)
+                k = j
+                while k < n:
+                    next_num = n1 + n2
+                    next_num_str = str(next_num)
+                    if not num.startswith(next_num_str, k):
+                        break
+                    k += len(next_num_str)
+                    n1, n2 = n2, next_num  # move window
+                
+                if k == n:
+                    return True
+        return False
