@@ -1,0 +1,11 @@
+class Solution:
+    def countSmaller(self, nums: List[int]) -> List[int]:
+        res = []
+        nums_sorted = SortedList()
+        for i in range(len(nums) - 1, -1, -1):
+            smaller = nums_sorted.bisect_left(nums[i])
+            nums_sorted.add(nums[i])
+            res.append(smaller)
+        
+        return res[::-1]
+        
