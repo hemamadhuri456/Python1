@@ -1,0 +1,21 @@
+from typing import List
+
+class Solution:
+    def maxProfit(self, prices: List[int]) -> int:           
+        can_buy = 0 # best profit while not holding and can buy
+        holding = float("-inf") # best profit while holding a stock
+        just_sold = float("-inf") # best profit if we sold today
+
+        for price in prices:
+            prev_sold = just_sold
+            
+            # sell action
+            just_sold = holding + price
+            
+            # buy action
+            holding = max(holding, can_buy - price)
+            
+            # cooldown transition
+            can_buy = max(can_buy, prev_sold)
+
+        return max(can_buy, just_sold)
