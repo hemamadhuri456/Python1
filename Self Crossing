@@ -1,0 +1,32 @@
+from enum import Enum
+
+class State(Enum):
+    GROW    = 1
+    SHRINK  = 2
+    TRANS   = 3
+
+class Solution:
+    def isSelfCrossing(self, distance: List[int]) -> bool:
+        d1 = d2 = d3 = d4 = 0
+        s = State.GROW
+
+        for d5 in distance:
+            match s:
+                case State.GROW:
+                    if d5 + d1 < d3:
+                        s = State.SHRINK
+                    elif d5 <= d3:
+                        s = State.TRANS 
+                case State.SHRINK:
+                    if d5 >= d3:
+                        return True
+                case State.TRANS:
+                    if d5 + d1 < d3:
+                        s = State.SHRINK
+                    else:
+                        return True
+                case _:
+                    raise ValueError("Undefined State!")
+            d1, d2, d3, d4 = d2, d3, d4, d5
+
+        return False
