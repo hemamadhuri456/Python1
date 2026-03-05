@@ -1,0 +1,37 @@
+class Codec:
+    """
+    Codec for serializing and deserializing binary trees using preorder DFS traversal.
+    """
+
+    def serialize(self, root: Optional[TreeNode]) -> str:
+        """
+        Serializes a binary tree to a space-separated string using preorder DFS.
+        """
+        def preorder(node: Optional[TreeNode], values: List[str]) -> None:
+            if node is None:
+                values.append('None')
+                return
+            values.append(str(node.val))
+            preorder(node.left, values)
+            preorder(node.right, values)
+
+        values = []
+        preorder(root, values)
+        return ' '.join(values)
+
+    def deserialize(self, data: str) -> Optional[TreeNode]:
+        """
+        Deserializes a space-separated string to a binary tree using preorder DFS.
+        """
+        values = iter(data.split())
+
+        def build() -> Optional[TreeNode]:
+            val = next(values)
+            if val == 'None':
+                return None
+            node = TreeNode(int(val))
+            node.left = build()
+            node.right = build()
+            return node
+
+        return build()
