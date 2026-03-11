@@ -1,0 +1,38 @@
+class Solution:
+    def minMutation(self, startGene: str, endGene: str, bank: List[str]) -> int:
+
+        bank = set(bank)
+        if endGene not in bank:
+            return -1
+        
+        if startGene == endGene:
+            return 0
+
+        q = deque([(startGene, "s"), (endGene, "e")])
+        seen = {
+            startGene: ("s", 0),
+            endGene: ("e", 0)
+        }
+
+        def getValidMutations(current_gene):
+            valid_mutations = []
+            for i in range(8):
+                for char in ['A', 'C', 'G', 'T']:
+                    mutation = current_gene[:i] + char + current_gene[i+1:]
+                    if mutation in bank:
+                        valid_mutations.append(mutation)
+            return valid_mutations
+
+
+        while q:
+            current_gene, source = q.popleft()
+
+            for mutation in getValidMutations(current_gene):
+                if mutation in seen and seen[mutation][0] != source:
+                    return seen[mutation][1] + seen[current_gene][1] + 1
+                
+                if mutation not in seen:
+                    q.append((mutation, source))
+                    seen[mutation] = (source, seen[current_gene][1] + 1)
+        return -1
+        
