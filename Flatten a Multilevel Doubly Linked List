@@ -1,0 +1,32 @@
+class Solution:
+    def flatten(self, head: 'Optional[Node]') -> 'Optional[Node]':
+        if not head:
+            return None
+
+        def getfirstandlast(node):
+            first = node
+            cur = node
+            last = None
+
+            while cur:
+                next_node = cur.next  
+                if cur.child:
+                    child_first, child_last = getfirstandlast(cur.child)
+                    cur.child = None
+
+                    cur.next = child_first
+                    child_first.prev = cur
+
+                    if next_node:
+                        child_last.next = next_node
+                        next_node.prev = child_last
+
+                    last = child_last
+                    cur = child_last  
+                else:
+                    last = cur
+                cur = cur.next
+            return first, last
+
+        first, _ = getfirstandlast(head)
+        return first
