@@ -1,0 +1,26 @@
+while (!boundary.empty()) {
+    // Extract the smallest element from the heap
+    pop_heap(boundary.begin(), boundary.end(), greater<>());
+    unsigned info = boundary.back();
+    boundary.pop_back(); // pop
+
+    auto [h, i, j] = unpack(info);// extract data
+    water_level = max(water_level, h);
+
+    // Process adjacent cell
+    for (int k = 0; k < 4; k++) {
+        int i0 = i + di[k], j0 = j + dj[k];
+        if (i0 < 0 || i0 >= m || j0 < 0 || j0 >= n ||
+            height[i0][j0] == -1)// outside or visited
+            continue;
+
+        int currH = height[i0][j0];
+        if (currH < water_level)// fill with water
+            ans += water_level - currH;
+
+        // Mark the cell as visited and push it to the heap
+        height[i0][j0] = -1;
+        boundary.push_back(pack(currH, i0, j0));
+        push_heap(boundary.begin(), boundary.end(), greater<>());
+    }
+}
