@@ -1,0 +1,64 @@
+"""
+keep track of keys and corresponding cnts
+self.lookup_cnt = map(key -> cnt)
+
+need way to find at least one key with highest and lowest cnt
+how to keep track of highest and lowest cnt?
+sort the cnts increasing.
+but will need knowledge of which keys have that count.
+another map: self.lookup_keys = map(cnt -> set of keys)
+minKey, v = self.lookup_keys.peekitem(0)
+maxKey, v = self.lookup_keys.peekitem(-1)
+
+inc:
+find cnt of key
+update the map
+find it in the other map, remove from the set, put it in the set 1 higher
+"""
+
+
+class AllOne:
+    def __init__(self):
+        self.k2c = {}
+        self.c2ks = SortedDict()
+
+    def _shift_ele(self, k, amt):
+        c = self.k2c[k]
+        new_c = c + amt
+
+        # remove from old c2ks bucket
+        s = self.c2ks[c]
+        s.remove(k)
+        if not s:
+            del self.c2ks[c]
+
+        # if its new count is 0, delete it. 
+        # if not, update key count, add to its new bucket
+        if new_c == 0:
+            del self.k2c[k]
+        else:
+            self.k2c[k] = new_c
+            self.c2ks.setdefault(new_c, set()).add(k)
+
+    def inc(self, key: str) -> None:
+        if key not in self.k2c:
+            self.k2c[key] = 1
+            self.c2ks.setdefault(1, set()).add(key)
+        else:
+            self._shift_ele(key, 1)
+
+    def dec(self, key: str) -> None:
+        # LeetCode guarantees key exists for dec
+        self._shift_ele(key, -1)
+
+    def getMaxKey(self) -> str:
+        if not self.k2c:
+            return ""
+        _, keys = self.c2ks.peekitem(-1)
+        return next(iter(keys))
+
+    def getMinKey(self) -> str:
+        if not self.k2c:
+            return ""
+        _, keys = self.c2ks.peekitem(0)
+        return next(iter(keys))
