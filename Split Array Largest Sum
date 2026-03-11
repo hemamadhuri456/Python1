@@ -1,0 +1,24 @@
+class Solution:
+    def splitArray(self, nums: List[int], k: int) -> int:
+        if k == 1: return sum(nums)
+
+        def ispossible(nums, maxnum, k):
+            count = 1
+            cur = 0
+            for num in nums:
+                if cur + num <= maxnum:
+                    cur += num
+                else:
+                    count += 1
+                    cur = num
+            return count <= k
+
+        low, high = max(nums), sum(nums)
+        while low <= high:
+            mid = (low+high)//2
+            if ispossible(nums, mid, k):
+                ans = mid
+                high = mid - 1
+            else:
+                low = mid + 1
+        return ans
