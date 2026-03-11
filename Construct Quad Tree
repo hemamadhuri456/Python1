@@ -1,0 +1,36 @@
+"""
+# Definition for a QuadTree node.
+class Node:
+    def __init__(self, val, isLeaf, topLeft, topRight, bottomLeft, bottomRight):
+        self.val = val
+        self.isLeaf = isLeaf
+        self.topLeft = topLeft
+        self.topRight = topRight
+        self.bottomLeft = bottomLeft
+        self.bottomRight = bottomRight
+"""
+
+class Solution:
+    def construct(self, grid: List[List[int]]) -> 'Node':
+        def all_same(size, row, col):
+            val = grid[row][col]
+            for i in range(row, row+size):
+                for j in range(col, col + size):
+                    if grid[i][j] != val:
+                        return False, val 
+            return True, val 
+        def build(size, row, col):
+            is_uniform, val  = all_same(size, row, col)
+            if is_uniform:
+                return Node(val , True, None, None, None, None)
+            half = size // 2
+            return Node(
+                    1, 
+                    False, 
+                    build(half, row, col), 
+                    build(half, row, col+half), 
+                    build(half , row + half, col), 
+                    build(half, row+half ,col+half)
+                    )
+
+        return build(len(grid), 0, 0)
