@@ -1,0 +1,10 @@
+class Solution:
+    def thirdMax(self, nums: List[int]) -> int:
+        occDict : dict = dict(Counter(nums))
+        numList : list = list(occDict.keys())
+        numList.sort()
+        
+        if (len(numList) < 3):
+            return numList[-1]
+        else:
+            return numList[-3]
