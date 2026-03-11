@@ -1,0 +1,17 @@
+    for i in range(len(chars) - 1):
+        if chars[i] == chars[i+1]:
+            count += 1
+        elif count == 1:
+            ans.append(chars[i])
+        else:
+            ans.append(chars[i])
+            ans.extend(list(str(count)))
+            count = 1
+
+    ans.append(chars[-1])
+
+    if count > 1:
+        ans.extend(list(str(count)))
+
+    chars[:len(ans)] = ans
+    return len(ans)
