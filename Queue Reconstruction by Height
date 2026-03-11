@@ -1,0 +1,32 @@
+class Solution:
+    def reconstructQueue(self, people: List[List[int]]) -> List[List[int]]:
+        n = len(people)
+        # sort, so that we go insert in increasing order of height,
+        # and decreasing order of k(i.e. number of equal or taller person
+        # in front of it)
+        people.sort(key=lambda x:(x[0],-x[1]))
+        bit = [0]*(n+1)
+        def occupy(index,val): # update operation
+            index+=1
+            while index<=n:
+                bit[index] += val
+                index += (index & - index)
+        def getOccupiedCount(index): # get occupied count from [0,index]
+            sm,index = 0, index+1
+            while index:
+                sm += bit[index]
+                index -= (index & - index)
+            return sm
+        ans = [[] for _ in range(n)]
+        # keep a BIT, for an imaginary array that shows whether i'th position has been occupied or
+        # not. At each step we try to find the smallest index which should have exactly k+1
+        # unoccupied positions before it. This index is occupied by current person.
+        # Use binary search on the prefix array that the BIT represents for the above imaginary 
+        # array
+        for p in people:
+            h,k = p
+            #smallest index whose number of 0 from left to n is >=k+1
+            i = bisect_left(range(n),k+1,key=lambda x: x+1-getOccupiedCount(x))
+            ans[i] = p
+            occupy(i,1) # position i is occupied, by setting corresponding value to 1
+        return ans
