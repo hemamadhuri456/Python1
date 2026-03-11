@@ -1,0 +1,35 @@
+class Solution:
+    def numberOfArithmeticSlices(self, nums: List[int]) -> int:
+
+        ln = len(nums)
+
+        nums.append(float("-inf"))
+
+        l = 0
+
+        
+
+        res = 0
+
+        dif = nums[1] - nums[0]
+
+        for r in range(1, ln+1):
+
+            cur_dif = nums[r]-nums[r-1]
+
+            if cur_dif != dif:
+
+                streak = r-l
+
+                if streak >=3:
+
+                    res += (streak-3 +1) * (streak-3+2)//2
+
+                l = r-1
+
+                dif = cur_dif
+
+        return res
+
+
+        
