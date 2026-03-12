@@ -1,0 +1,58 @@
+from typing import Union
+import hashlib
+import base64
+
+ShortenUrl = str
+DestinationUrl = str
+
+class DB:
+    __slots__ = 'urls', 'destinations'
+    def __init__(self):
+        self.destinations: dict[ShortenUrl, DestinationUrl] = {}
+        self.urls: dict[DestinationUrl, ShortenUrl] = {}
+
+    def add(self, url: ShortenUrl, destination: DestinationUrl) -> 'DB':
+        if url in self.destinations:
+            raise ValueError(f"Hash collision detected: {url}")
+
+        self.destinations[url] = destination
+        self.urls[destination] = url
+        return self
+
+    def get_url(self, destination: DestinationUrl) -> Union[str, None]:
+        return self.urls.get(destination)
+
+    def get_destination(self, url: ShortenUrl) -> Union[str, None]:
+        return self.destinations.get(url)
+
+class Codec:
+    __slots__ = 'db', 'base_url'
+
+    def __init__(self):
+        self.db = DB()
+        self.base_url = "http://tinyurl.com/"
+
+    @staticmethod
+    def generate_id(value: str) -> str:
+        digest = hashlib.sha256(value.encode()).digest()
+        return base64.urlsafe_b64encode(digest[:6]).decode().rstrip('=')
+
+    def generate_shorten_url(self, id_: str) -> str:
+        return self.base_url + id_
+
+    def encode(self, longUrl: DestinationUrl) -> str:
+        """Encodes a URL to a shortened URL if it was not shortened before, otherwise returns the previously shortened URL."""
+        shorten_url_from_db = self.db.get_url(longUrl)
+
+        if not shorten_url_from_db:
+            id_ = self.generate_id(longUrl)
+            shorten_url = self.generate_shorten_url(id_)
+            self.db.add(shorten_url, longUrl)
+            return shorten_url
+        else:
+            print("Shorten URL with the matching destination already exists. Returning existing.")
+            return shorten_url_from_db      
+        
+    def decode(self, shortUrl: ShortenUrl) -> str:
+        """Decodes a shortened URL to its original URL."""
+        return self.db.get_destination(shortUrl) 
