@@ -1,0 +1,56 @@
+import heapq
+
+class Twitter:
+
+    def __init__(self):
+        self.users = {}
+        self.timer = 0
+
+    def postTweet(self, userId: int, tweetId: int) -> None:
+        if userId not in self.users:
+            self.users[userId] = {'tweets': [], 'following': set()}
+            # A user follows themselves to see their own tweets
+            self.users[userId]['following'].add(userId)
+
+        # Store tweets as (negative_timestamp, tweetId)
+        # Using a negative timestamp simulates a max-heap
+        self.users[userId]['tweets'].append((-self.timer, tweetId))
+        self.timer += 1
+
+    def getNewsFeed(self, userId: int) -> List[int]:
+        if userId not in self.users:
+            return []
+
+        # Min-heap to get the 10 most recent tweets
+        feed_heap = []
+        
+        # Add the latest 10 tweets from the user and their followees to the heap.
+        for followeeId in self.users[userId]['following']:
+            if followeeId in self.users:
+                # Retrieve the most recent 10 tweets to optimize
+                for tweet_tuple in self.users[followeeId]['tweets'][-10:]:
+                    heapq.heappush(feed_heap, tweet_tuple)
+
+        result = []
+        while feed_heap and len(result) < 10:
+            # Pop the most recent tweet (with the smallest negative timestamp)
+            negative_timestamp, tweetId = heapq.heappop(feed_heap)
+            result.append(tweetId)
+
+        return result
+    
+    def follow(self, followerId: int, followeeId: int) -> None:
+        if followerId not in self.users:
+            self.users[followerId] = {'tweets': [], 'following': set()}
+            self.users[followerId]['following'].add(followerId)
+        
+        if followeeId not in self.users:
+            self.users[followeeId] = {'tweets': [], 'following': set()}
+            self.users[followeeId]['following'].add(followeeId)
+
+        self.users[followerId]['following'].add(followeeId)
+
+    def unfollow(self, followerId: int, followeeId: int) -> None:
+        # A user cannot unfollow themselves
+        if followerId in self.users and followeeId in self.users[followerId]['following'] and followerId != followeeId:
+            self.users[followerId]['following'].remove(followeeId)
