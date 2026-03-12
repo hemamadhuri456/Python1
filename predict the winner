@@ -1,0 +1,18 @@
+class Solution:
+    def predictTheWinner(self, nums: List[int]) -> bool:
+        
+        @cache
+        def recursion(p1, p2, l, r, p1_chance):
+            if l > r:
+                return p1 >= p2
+            
+            if p1_chance:
+                return (
+                    recursion(p1 + nums[l], p2, l + 1, r, not p1_chance) or recursion(p1 + nums[r], p2, l, r - 1, not p1_chance)
+                )
+            else:
+                return(
+                    recursion(p1, p2 + nums[l], l + 1, r, not p1_chance) and recursion(p1, p2 + nums[r], l, r - 1, not p1_chance)
+                )
+        
+        return recursion(0, 0, 0, len(nums) - 1, True)
