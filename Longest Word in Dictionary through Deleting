@@ -1,0 +1,19 @@
+class Solution:
+    def find(self,s,word):
+        idx=0
+        for i in s:
+            if i==word[idx]:
+                if idx+1==len(word):
+                    return True
+                idx+=1
+        return False
+    def findLongestWord(self, s: str, words: List[str]) -> str:
+        seen=''
+        for i in words:
+            if self.find(s,i):
+                if len(i)>len(seen):
+                    seen=i
+                elif len(i)==len(seen) and i<seen:
+                    seen=i
+        return seen
+
