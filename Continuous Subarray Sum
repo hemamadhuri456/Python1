@@ -1,0 +1,22 @@
+class Solution:
+    def checkSubarraySum(self, nums: List[int], k: int) -> bool:
+        dabba={0:-1}
+        l=len(nums)
+        kootal=0
+        for j in range(0,l):
+            kootal+=nums[j]
+            pulli=kootal%k
+
+            if pulli in dabba:
+                if j-dabba[pulli]>=2:
+
+                    return True
+        
+            if pulli not in dabba:
+
+                dabba[pulli]=j
+
+        return False
+
+
+        
