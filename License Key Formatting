@@ -1,0 +1,14 @@
+class Solution:
+    def licenseKeyFormatting(self, S: str, K: int) -> str:
+        S = S.replace("-", "").upper() # remove "-" and covert string to uppercase
+        remainder = len(S) % K      # calculate length of first group
+										# For example:
+										# remainder==1; k=3: 1-123-123-123
+										# remainder==0; k=3: _-123-123-123 (blank)
+										
+		first_grp = [S[: remainder]]
+        other_grps= [S[i : i + K] for i in range(remainder, len(S), K)]
+        
+        if remainder: return "-".join(first_grp + other_grps)
+		# first group is empty at this point
+        return "-".join(other_grps)
