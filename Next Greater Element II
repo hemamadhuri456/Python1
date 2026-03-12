@@ -1,0 +1,20 @@
+class Solution:
+    def nextGreaterElements(self, nums: List[int]) -> List[int]:
+
+        nums=nums*2
+        l=len(nums)
+        vidai=[-1]*l
+
+        dabba=[]
+        for j in range(-1,-(l+1),-1):
+            while dabba and dabba[-1]<=nums[j]:
+                dabba.pop()
+            
+            if dabba:
+                vidai[j]=dabba[-1]
+            dabba.append(nums[j])
+        
+        return vidai[:l//2]
+
+
+        
