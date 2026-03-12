@@ -1,0 +1,15 @@
+class Solution:
+    def canIWin(self, maxInt: int, total: int) -> bool:
+        #condition1
+        if maxInt * (maxInt+1) / 2 < total: return False
+
+        @cache
+        def func(nums, total):
+            #condition2
+            if any(total <= x for x in nums): return True 
+            #condition3
+            return any(not func(nums-{x}, total-x) for x in nums)
+
+        return func(frozenset(range(1,maxInt+1)), total)
+
+            
