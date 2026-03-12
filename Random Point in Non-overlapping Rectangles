@@ -1,0 +1,13 @@
+from random import choices, randint
+
+class Solution:
+  def __init__(self, rects: list[list[int]]):
+    self._weights = list(map(
+      lambda x: (x[2] - x[0] + 1) * (x[3] - x[1] + 1),
+      rects
+    ))
+    self._rects = rects
+
+  def pick(self) -> list[int]:
+    a, b, x, y = choices(self._rects, weights = self._weights)[0]
+    return [randint(a, x), randint(b, y)]
