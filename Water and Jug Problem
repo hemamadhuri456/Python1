@@ -1,0 +1,53 @@
+class Solution:
+    def canMeasureWater(self, jug1Capacity: int, jug2Capacity: int, targetCapacity: int) -> bool:
+        """
+        we can solve this problemm using simple bfs approach
+        let the initial state be (0, 0), every time a state is dequeued, 
+        we can perform either of the following operations on that state
+
+        pour from jug1 to jug2 (if there is water in jug1 and available capacity in jug2)
+        pour from jug2 to jug1 (if there is water in jug2 and avaialable capacity in jug1)
+        empty jug1 (if there is water present in jug 1)
+        empty jug2 (if there is water present in jug2)
+        completely fill jug1 (if there is avaialable capacity in jug1)
+        completely fill jug2 (if there is avaialble capacity in jug2)
+
+        if a state is already visited, then we won't be enqueuing that state again in the queue
+        """
+        visited = set()
+        que = deque([(0, 0)])
+        while len(que):
+            a, b = que.popleft()
+            if a + b == targetCapacity:
+                return True
+
+            if a and b < jug2Capacity:
+                c = min(a, jug2Capacity - b)
+                if (a-c, c+b) not in visited:
+                    visited.add((a-c, c+b))
+                    que.append((a-c, c+b))
+            
+            if b and a < jug1Capacity:
+                c = min(b, jug1Capacity - a)
+                if (a+c, b-c) not in visited:
+                    visited.add((a+c, b-c))
+                    que.append((a+c,b-c))
+            
+            if a and (0, b) not in visited:
+                visited.add((0, b))
+                que.append((0, b))
+            
+            if b and (a, 0) not in visited:
+                visited.add((a, 0))
+                que.append((a, 0))
+            
+            if a != jug1Capacity and (jug1Capacity, b) not in visited:
+                visited.add((jug1Capacity, b))
+                que.append((jug1Capacity, b))
+            
+            if b != jug2Capacity and (a, jug2Capacity) not in visited:
+                visited.add((a, jug2Capacity))
+                que.append((a, jug2Capacity))
+
+        return False
+        
