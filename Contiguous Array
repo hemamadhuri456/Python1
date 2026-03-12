@@ -1,0 +1,29 @@
+class Solution:
+    def findMaxLength(self, nums: List[int]) -> int:
+        psum = []
+        running = 0
+        for x in nums:
+            if x == 1:
+                running += x
+            else:
+                running -= 1
+            psum.append(running)
+        freqs = {0:-1}
+
+        maxlen = 0
+
+        for i in range(len(psum)):
+            if psum[i] in freqs:
+                maxlen = max(maxlen, i - freqs[psum[i]]) # don't need +1 here because 
+                # we dont want the length of the subarray in psum with equal values, we want the length of the subarray in nums
+                # and since psum is defined the way that it is,
+                # just taking the differences between indices (with no +1), nets us the subarray in nums with equal nuimber of 0s and 1s
+            else:
+                freqs[psum[i]] = i
+        print(psum)
+        print(freqs)
+        return maxlen
+                
+
+
+            
