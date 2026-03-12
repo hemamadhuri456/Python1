@@ -1,0 +1,63 @@
+from typing import List
+import random
+
+
+class Solution:
+    def __init__(self, m: int, n: int):
+        """
+        Initialize the matrix flipper with dimensions m x n.
+      
+        Args:
+            m: Number of rows in the matrix
+            n: Number of columns in the matrix
+        """
+        self.rows = m
+        self.cols = n
+        self.total_cells = m * n
+        # Virtual mapping to track swapped positions
+        # Maps original index to its current value after swaps
+        self.index_mapping = {}
+
+    def flip(self) -> List[int]:
+        """
+        Randomly select and flip a cell that hasn't been flipped yet.
+        Uses Fisher-Yates shuffle concept with virtual mapping.
+      
+        Returns:
+            List containing [row, column] of the flipped cell
+        """
+        # Decrease available cells count
+        self.total_cells -= 1
+      
+        # Generate random index from remaining unflipped cells
+        random_index = random.randint(0, self.total_cells)
+      
+        # Get the actual index (considering previous swaps)
+        # If random_index has been swapped before, use its mapped value
+        # Otherwise, use random_index itself
+        actual_index = self.index_mapping.get(random_index, random_index)
+      
+        # Swap the selected index with the last available index
+        # This ensures we don't select the same cell twice
+        last_index_value = self.index_mapping.get(self.total_cells, self.total_cells)
+        self.index_mapping[random_index] = last_index_value
+      
+        # Convert 1D index to 2D coordinates [row, column]
+        row = actual_index // self.cols
+        col = actual_index % self.cols
+      
+        return [row, col]
+
+    def reset(self) -> None:
+        """
+        Reset all flipped cells back to their original state.
+        Clears the mapping and resets the total count.
+        """
+        self.total_cells = self.rows * self.cols
+        self.index_mapping.clear()
+
+
+# Your Solution object will be instantiated and called as such:
+# obj = Solution(m, n)
+# param_1 = obj.flip()
+# obj.reset()
