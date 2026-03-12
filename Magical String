@@ -1,0 +1,18 @@
+class Solution:
+    def magicalString(self, n: int) -> int:
+        if n <= 3:
+            return 1
+        count_ones, i = 1, 2
+        lst = [(2,)]
+        while i < n:
+            for digit in lst[0]:
+                if digit == 1:
+                    lst.append((3 - lst[-1][0],))
+                    count_ones += 1
+                elif digit == 2:
+                    lst.append((3 - lst[-1][0], 3 - lst[-1][0]))
+                i += 1
+                if i == n:
+                    break
+            lst.pop(0)
+        return count_ones
