@@ -1,0 +1,11 @@
+class Solution:
+    def medianSlidingWindow(self, nums: List[int], k: int) -> List[float]:
+        window = SortedList(nums[:k])
+        res = [window[k // 2]] if k % 2 else [(window[k // 2 - 1] + window[k // 2]) / 2]
+        l = 0
+        for r in range(k, len(nums)):
+            window.remove(nums[l])
+            window.add(nums[r])
+            l += 1
+            res += [window[k // 2]] if k % 2 else [(window[k // 2 - 1] + window[k // 2]) / 2]
+        return res
