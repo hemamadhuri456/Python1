@@ -1,0 +1,20 @@
+class Solution:
+    def countArrangement(self, n: int) -> int:
+        finish = n + 1
+        permut = [i for i in range(finish)]
+        count = 0
+        def genPermutation(start: int, comb: List[int]):
+            if start == n:
+                nonlocal count
+                count += 1
+                return
+            for i in range(start, finish):
+                combI = comb[i]
+                start1 = start + 1
+                if combI % start1 == 0 or start1 % combI == 0:
+                    combStart = comb[start]
+                    comb[start], comb[i] = combI, combStart
+                    genPermutation(start1, comb)
+                    comb[start], comb[i] = combStart, combI
+        genPermutation(1, permut)
+        return count
