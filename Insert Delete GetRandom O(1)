@@ -1,0 +1,84 @@
+import random
+from typing import Optional
+
+class RandomizedSet:
+
+    def __init__(self):
+        self.capacity = 1
+        self.size = 0
+        self.load_factor = 0.7
+        self.DEFUNCT = object()
+        self.table = [None] * self.capacity
+        self.values = []
+
+    def _hash(self, val: int) -> int:
+        return hash(val) % self.capacity
+    
+    def _rehash(self):
+        old_table = self.table
+        self.capacity*=2
+        self.table = [None]*self.capacity
+        self.size = 0
+        for item in old_table:
+            if item not in (None, self.DEFUNCT):
+                self._insert_internal(item)
+
+    def _insert_internal(self, val: int) -> bool:
+        index = self._hash(val)
+        for i in range(self.capacity):
+            linear_probing = (index+i)% self.capacity
+            if self.table[linear_probing] in (None, self.DEFUNCT):
+                self.table[linear_probing] = val
+                self.size += 1
+                return True
+            elif self.table[linear_probing]== val:
+                return False
+        return False
+        
+
+    def insert(self, val: int) -> bool:
+        if self.contains(val):
+            return False
+        if self.size / self.capacity > self.load_factor:
+            self._rehash()
+        self._insert_internal(val)
+        self.values.append(val)
+        return True
+        
+    def contains(self, val: int) -> int:
+        index = self._hash(val)
+        for i in range(self.capacity):
+            linear_probing = (index + i)% self.capacity
+            if self.table[linear_probing] is None:
+                return False
+            elif self.table[linear_probing] == val:
+                return True
+        return False
+
+    def remove(self, val: int) -> bool:
+        index = self._hash(val)
+        for i in range(self.capacity):
+            linear_probing = (index + i) % self.capacity
+            if self.table[linear_probing] is None:
+                return False
+            elif self.table[linear_probing] == val:
+                self.table[linear_probing] = self.DEFUNCT
+                self.size -= 1
+                if val in self.values:
+                    self.values.remove(val)
+                return True
+        return False
+        
+
+    def getRandom(self) -> int:
+        if not self.values:
+            return None
+        return random.choice(self.values)
+        
+
+
+# Your RandomizedSet object will be instantiated and called as such:
+# obj = RandomizedSet()
+# param_1 = obj.insert(val)
+# param_2 = obj.remove(val)
+# param_3 = obj.getRandom()
