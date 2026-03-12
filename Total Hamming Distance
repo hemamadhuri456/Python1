@@ -1,0 +1,11 @@
+    n = len(nums)
+    s = 0
+    for i in range(32):
+        c = 0
+        for j in range(n):
+            c += (nums[j]>>i) & 1
+            
+        s+= c *(n-c)
+    return s
+            
+            
