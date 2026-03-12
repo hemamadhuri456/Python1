@@ -1,0 +1,36 @@
+class Solution:
+    @cache
+    def compress(self, s):
+        stack = []
+        for c in s:
+            if stack and stack[-1][0] != c and stack[-1][1] >= 3:
+                stack.pop()
+            if not stack or stack[-1][0] != c:
+                stack.append([c, 1])
+            else:
+                stack[-1][1] += 1
+        if stack and stack[-1][1] >= 3:
+            stack.pop()
+        return ''.join(a*b for a, b in stack)
+
+    def findMinStep(self, board: str, hand: str) -> int:
+        n = len(hand)
+        hand = ''.join(sorted(hand))
+        @cache
+        def solve(board, hand):
+            board = self.compress(board)
+            if board == '': return n - len(hand)
+            if hand == '': return 1e9
+
+            ans = 1e9
+            for i in range(len(hand)):
+                if i > 0 and hand[i] == hand[i-1]: continue
+    
+                for j in range(len(board)):
+                    if board[j] == hand[i] or j > 0 and board[j] == board[j-1] and board[j] != hand[i]:
+                        ans = min(ans, solve(board[0:j] + hand[i] + board[j:], hand[0:i] + hand[i+1:]))
+            return ans
+        
+        res = solve(board, hand)
+        if res == 1e9: return -1
+        else: return res
