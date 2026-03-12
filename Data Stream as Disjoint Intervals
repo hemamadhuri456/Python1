@@ -1,0 +1,30 @@
+class SummaryRanges:
+
+    def __init__(self):
+        self.seen = set()
+        
+
+    def addNum(self, value: int) -> None:
+        self.seen.add(value)
+        
+
+    def getIntervals(self) -> List[List[int]]:
+        ans = []
+        for i in self.seen:
+            if i - 1 in self.seen:
+                continue
+            cad = i
+            start = i
+            while cad+1 in self.seen:
+                cad += 1
+            ans.append([start, cad])
+        return sorted(ans)
+            
+
+        
+
+
+# Your SummaryRanges object will be instantiated and called as such:
+# obj = SummaryRanges()
+# obj.addNum(value)
+# param_2 = obj.getIntervals()
