@@ -1,0 +1,3 @@
+class Solution:
+    def countNumbersWithUniqueDigits(self, n: int) -> int:
+        return 1+sum(perm(10,k) for k in range(1,n+1))*9//10
