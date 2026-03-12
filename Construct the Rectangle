@@ -1,0 +1,9 @@
+class Solution:
+    def constructRectangle(self, area: int) -> List[int]:
+        sq_rt = sqrt(area)
+        if int(sq_rt)**2 == area:
+            return [int(sq_rt), int(sq_rt)]
+        else:
+            for i in range(int(sq_rt)+1, area+1):
+                if i*(area//i) == area:
+                    return [i, area//i]
