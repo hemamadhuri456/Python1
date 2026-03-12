@@ -1,0 +1,23 @@
+class Solution:
+    def longestSubstring(self, s: str, k: int) -> int:
+        ans, queue = 0, deque()     # Divide & conquer: for a given word, determine
+        queue.append(s)             # whether it is valid, i.e, each char occurs at 
+                                    # least k times. If so, we update the ans as needed.
+                                    # If not, split the word at each under-represented 
+                                    # char, and then check each new word in the split.
+                                    # A queue is used to keep track of all the splits, 
+                                    # and s is the first word to check.
+ 
+        while queue:                        # pop a word from the queue until len(word) 
+            word = queue.pop()              # is greater than the current answer. 
+            if len(word) > ans:         
+                c = Counter(word)
+                if min(c.values()) >= k:    # if the word is valid, update the answer
+                    ans = len(word)
+                else:                       # else, append the new splits to the queue
+                    for ch in c:
+                        if c[ch] < k:
+                            word = word.replace(ch, 'X')
+                    queue.extend(word.strip('X').split('X'))
+
+        return ans
