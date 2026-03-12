@@ -1,0 +1,25 @@
+class Solution:
+    def validUtf8(self, data: List[int]) -> bool:
+        data = [ "0"*(8-len(bin(d)[2:])) + bin(d)[2:] for d in data]
+
+        i = 0
+        ACC = []
+        while i < len(data):
+            if data[i][0] == "0":
+                i += 1
+            else:
+                Bytes = data[i].split("0")[0].count("1")
+                
+                if Bytes < 2 or Bytes > 4:
+                    return False
+                
+                if i + Bytes - 1 >= len(data):
+                    return False
+                
+                for j in range(i + 1, i + Bytes):
+                    if not (data[j][0] == "1" and data[j][1] == "0"):
+                        return False
+                
+                i += Bytes
+
+        return True
