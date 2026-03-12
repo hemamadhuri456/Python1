@@ -1,0 +1,31 @@
+class Solution:
+    def findDiagonalOrder(self, mat: List[List[int]]) -> List[int]:
+        # m x n
+        # * * * *
+        # * * * *
+
+        # * *
+        # * *
+        # * *
+        # each diagonal has same indices sum i + j
+        # top row is new diagonal; array populated left to right
+        # each encountered cell, populate new i+j sum or add it
+        sums = defaultdict(list) # indexed by i+j
+        # instead of defaultdict could have list if you derive n_diagonals with math.. idk tho
+
+        for i in range(len(mat)):
+            for j in range(len(mat[i])):
+                sums[i+j].append(mat[i][j])
+
+        # lens 1000 max, can sort 1000 log 1000 for constant
+        # keys = sorted(list(sums.keys()))
+        keys = sums.keys() 
+
+        rez = []
+        reverse = True # original iteration order will be top right to bottom left
+        for key in keys:
+            line = sums[key] if not reverse else reversed(sums[key])
+            rez += line # from smallest to largest index-sum add diagonal sum computed
+            reverse = not reverse
+
+        return rez
