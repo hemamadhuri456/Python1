@@ -1,0 +1,17 @@
+class Solution:
+    def findMaximizedCapital(self, k: int, w: int, profits: List[int], capital: List[int]) -> int:
+        
+        heap = [(c, p) for c, p in zip(capital, profits)]
+        heapify(heap)
+
+        avail = []
+        
+        while k:
+            while heap and heap[0][0] <= w:
+                c, p = heappop(heap)
+                heappush(avail ,-p)
+            if not avail: return w
+            w += -heappop(avail)
+            k -= 1
+        return w
+        
